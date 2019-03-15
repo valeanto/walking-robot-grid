@@ -33,21 +33,21 @@ public class PlayerMovement : MonoBehaviour
 
         if (moving)
         {
+            transform.position = Vector3.MoveTowards(transform.position, pos, Time.deltaTime * speed);
+            transform.position = pos;
+
             if (transform.position == pos)
             {
                 moving = false;
                 canMove = true;
-
-                move();
             }
-            transform.position = Vector3.MoveTowards(transform.position, pos, Time.deltaTime * speed);
         }
     }
     private void move()
     {
         if (buttonCooldown <= 0)
         {
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 if (dir != DIRECTION.UP)
                 {
@@ -62,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
                     pos += Vector3.up;
                 }
             }
-            else if (Input.GetKey(KeyCode.DownArrow))
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 if (dir != DIRECTION.DOWN)
                 {
@@ -77,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
                     pos += Vector3.down;
                 }
             }
-            else if (Input.GetKey(KeyCode.LeftArrow))
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 if (dir != DIRECTION.LEFT)
                 {
@@ -93,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
-            else if (Input.GetKey(KeyCode.RightArrow))
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 if (dir != DIRECTION.RIGHT)
                 {
