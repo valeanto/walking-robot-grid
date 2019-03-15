@@ -26,7 +26,7 @@ public class WorldGrid : MonoBehaviour
                 tile.y = j;
                 tiles[i, j] = tile;
 
-
+                tile.name = "Tile at (" + i + ", " + j + ")";
             }
         }
     }
@@ -37,5 +37,14 @@ public class WorldGrid : MonoBehaviour
 
     }
 
-   
+    public Tile GetTile(Vector2 pos)
+    {
+        var i = Mathf.FloorToInt(pos.x);
+        var j = Mathf.FloorToInt(pos.y);
+        if (i < 0 || i >= w || j < 0 || j >= h)
+        {
+            return null;
+        }
+        return tiles[i, j];
+    }
 }

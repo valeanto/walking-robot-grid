@@ -11,6 +11,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 pos;
     private Animator ani;
 
+    public WorldGrid grid;
+    public Tile tile;
+
 
 
     // Start is called before the first frame update
@@ -33,16 +36,35 @@ public class PlayerMovement : MonoBehaviour
 
         if (moving)
         {
-            transform.position = Vector3.MoveTowards(transform.position, pos, Time.deltaTime * speed);
+            //transform.position = Vector3.MoveTowards(transform.position, pos, Time.deltaTime * speed);
             transform.position = pos;
-
             if (transform.position == pos)
             {
                 moving = false;
                 canMove = true;
+
+                //move();
             }
         }
     }
+
+    public void MoveBy(Vector3 deltaMove)
+    {
+        var newPos = transform.position + deltaMove;
+        var newTile = grid.GetTile(newPos);
+        if (newTile == null)
+        {
+            return;
+        }
+
+        tile = newTile;
+        canMove = false;
+        moving = true;
+        pos += deltaMove;
+
+        print("Moved to " + tile.name);
+    }
+
     private void move()
     {
         if (buttonCooldown <= 0)
@@ -57,9 +79,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    canMove = false;
-                    moving = true;
-                    pos += Vector3.up;
+                    MoveBy(Vector3.up);
                 }
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -72,9 +92,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    canMove = false;
-                    moving = true;
-                    pos += Vector3.down;
+                    MoveBy(Vector3.down);
                 }
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -87,9 +105,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    canMove = false;
-                    moving = true;
-                    pos += Vector3.left;
+                    MoveBy(Vector3.left);
                 }
             }
 
@@ -103,9 +119,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    canMove = false;
-                    moving = true;
-                    pos += Vector3.right;
+                    MoveBy(Vector3.right);
                 }
             }
         }
