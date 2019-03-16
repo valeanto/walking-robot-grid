@@ -24,8 +24,6 @@ public class PlayerMovement : MonoBehaviour
     {
         ani = gameObject.GetComponent<Animator>();
         ani.Play("PlayerDown");
-
-        print(grid.GetTile(new Vector2(2,2)).name);
     }
 
 
