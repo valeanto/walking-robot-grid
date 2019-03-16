@@ -5,6 +5,7 @@ using UnityEngine;
 public enum DIRECTION { UP, DOWN, LEFT, RIGHT }
 public class PlayerMovement : MonoBehaviour
 {
+    private string[] Animations = { "PlayerUp", "PlayerDown", "PlayerLeft", "PlayerRight" };
     private bool canMove = true, moving = false;
     private int speed = 5, buttonCooldown = 0;
     private DIRECTION dir = DIRECTION.DOWN;
@@ -22,10 +23,10 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ani = gameObject.GetComponent<Animator>();
-        ani.Play("PlayerDown");
+        //SetPosition(new Vector2(2, 2));
 
-        print(grid.GetTile(new Vector2(2,2)).name);
+    ani = gameObject.GetComponent<Animator>();
+        ani.Play("PlayerDown");
     }
 
 
@@ -68,6 +69,33 @@ public class PlayerMovement : MonoBehaviour
         pos += deltaMove;
 
         print("Moved to " + tile.name);
+    }
+
+    public void SetPosition(Vector2 pos, DIRECTION d)
+    {
+        var newTile = grid.GetTile(pos);
+        if (newTile == null)
+        {
+            return;
+        }
+
+        tile = newTile;
+
+        var position = tile.transform.position;
+        position.x += 0.5f;
+        position.y += 0.738f;
+        transform.position = position;
+
+        UpdateRotation(d);
+    }
+
+    private void UpdateRotation(DIRECTION newDir)
+    {
+        if(dir != newDir)
+        {
+            dir = newDir;
+            ani.Play(Animations[(int)newDir]);
+        }
     }
 
     private void move()
@@ -127,6 +155,28 @@ public class PlayerMovement : MonoBehaviour
                     MoveBy(Vector3.right);
                 }
             }
+        }
+    }
+
+    public void ExecuteCommand(string fullCommand)
+    {
+        print("-->" + fullCommand);
+        var args = fullCommand.Split(' ');
+        var cmd = args[0].ToLower();
+        if(cmd == "place" && args.Length == 3)
+        {
+            var coords = args[1].Split(',');
+            if (!int.TryParse(coords[0], out int x) || !int.TryParse(coords[1], out int y))
+                return;
+
+            // convert direction (string) to our direction enum
+            DIRECTION d = DIRECTION.DOWN;
+            var ds = args[2].ToLower();
+            if (ds == "north") d = DIRECTION.UP;
+            else if (ds == "left") d = DIRECTION.LEFT;
+            else if (ds == "right") d = DIRECTION.RIGHT;
+
+            SetPosition(new Vector2(x, y), d);
         }
     }
 }
