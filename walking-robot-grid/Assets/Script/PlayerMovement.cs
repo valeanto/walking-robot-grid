@@ -7,7 +7,8 @@ public class PlayerMovement : MonoBehaviour
 {
     private string[] Animations = { "PlayerUp", "PlayerDown", "PlayerLeft", "PlayerRight" };
     private bool canMove = true, moving = false;
-    private int speed = 5, buttonCooldown = 0;
+    private int speed = 5, buttonCooldown = 1;
+    private bool gameStarted;
     private DIRECTION dir = DIRECTION.DOWN;
     private Vector3 pos;
     private Animator ani;
@@ -33,7 +34,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        buttonCooldown--;
+        if (gameStarted)
+        {
+            buttonCooldown--;
+        }
+
         if (canMove)
         {
             pos = transform.position;
@@ -177,6 +182,7 @@ public class PlayerMovement : MonoBehaviour
             else if (ds == "right") d = DIRECTION.RIGHT;
 
             SetPosition(new Vector2(x, y), d);
+            gameStarted = true;
         }
     }
 }
