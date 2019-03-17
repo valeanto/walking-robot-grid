@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum DIRECTION { UP, DOWN, LEFT, RIGHT }
 public class PlayerMovement : MonoBehaviour
@@ -15,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
 
     public WorldGrid grid;
     public Tile tile;
+    public InputField inputCommand;
 
     public DIRECTION Direction
     {
@@ -28,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
 
     ani = gameObject.GetComponent<Animator>();
         ani.Play("PlayerDown");
+        tile = grid.GetTile(transform.position);
     }
 
 
@@ -181,8 +184,16 @@ public class PlayerMovement : MonoBehaviour
             else if (ds == "left") d = DIRECTION.LEFT;
             else if (ds == "right") d = DIRECTION.RIGHT;
 
+            inputCommand.text = "";
+
             SetPosition(new Vector2(x, y), d);
             gameStarted = true;
+
         }
+    }
+
+    public void ReportPosition(Text text)
+    {
+        text.text = tile.name;
     }
 }

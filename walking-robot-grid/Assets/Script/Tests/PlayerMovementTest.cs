@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityEngine.UI;
 
 namespace Tests
 {
@@ -71,6 +73,42 @@ namespace Tests
             Assert.Equals(player.tile.name, "Tile at (4, 4)");
         }
 
+        [Test]
+        public void PlayerMovementCommand()
+        {
+            var playerGO = GameObject.FindGameObjectWithTag("Player");
+            var player = playerGO.GetComponent<PlayerMovement>();
+            var tileName = player.tile.name;
+            var dir = player.Direction;
+
+            player.ExecuteCommand("");
+            Assert.Equals(player.tile.name, tileName);
+            Assert.Equals(player.Direction, dir);
+            player.ExecuteCommand("sflj wer");
+            Assert.Equals(player.tile.name, tileName);
+            Assert.Equals(player.Direction, dir);
+            player.ExecuteCommand("place x,5 north");
+            Assert.Equals(player.tile.name, tileName);
+            Assert.Equals(player.Direction, dir);
+
+            player.ExecuteCommand("place 6,3 north");
+            Assert.Equals(player.tile.name, tileName);
+            Assert.Equals(player.Direction, dir);
+
+            player.ExecuteCommand("place 2,3 north");
+            Assert.Equals(player.tile.name, "Tile at (2,3)");
+            Assert.Equals(player.Direction, DIRECTION.UP);
+        }
+
+        [Test]
+        public void PlayerMovementReportPosition()
+        {
+            var playerGO = GameObject.FindGameObjectWithTag("Player");
+            var player = playerGO.GetComponent<PlayerMovement>();
+            var text = GameObject.FindObjectsOfType<Text>().Where(o => o.name == "TextPlayerTile").FirstOrDefault();
+            player.ReportPosition(text);
+            Assert.Equals(text.text, player.tile.name);
+        }
 
         // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
         // `yield return null;` to skip a frame.
