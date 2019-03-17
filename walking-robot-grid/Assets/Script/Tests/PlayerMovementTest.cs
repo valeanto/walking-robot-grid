@@ -19,13 +19,13 @@ namespace Tests
             var playerGO = GameObject.FindGameObjectWithTag("Player");
             var player = playerGO.GetComponent<PlayerMovement>();
             player.MoveBy(Vector3.up);
-            Assert.Equals(player.Direction, DIRECTION.UP);
+            Assert.Equals(player.Direction, DIRECTION.Up);
             player.MoveBy(Vector3.down);
-            Assert.Equals(player.Direction, DIRECTION.DOWN);
+            Assert.Equals(player.Direction, DIRECTION.Down);
             player.MoveBy(Vector3.left);
-            Assert.Equals(player.Direction, DIRECTION.LEFT);
+            Assert.Equals(player.Direction, DIRECTION.Left);
             player.MoveBy(Vector3.right);
-            Assert.Equals(player.Direction, DIRECTION.RIGHT);
+            Assert.Equals(player.Direction, DIRECTION.Right);
         }
 
         [Test]
@@ -97,7 +97,7 @@ namespace Tests
 
             player.ExecuteCommand("place 2,3 north");
             Assert.Equals(player.tile.name, "Tile at (2,3)");
-            Assert.Equals(player.Direction, DIRECTION.UP);
+            Assert.Equals(player.Direction, DIRECTION.Up);
         }
 
         [Test]
